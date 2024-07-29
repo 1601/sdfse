@@ -2,6 +2,7 @@ const startButton = document.getElementById('start-button');
 const restartButton = document.getElementById('restart-button');
 const skip20Button = document.getElementById('skip-20-button');
 const skip5Button = document.getElementById('skip-5-button');
+const defuseButton = document.getElementById('defuse-button');
 const bestScoreDisplay = document.getElementById('best-score');
 const lastScoreDisplay = document.getElementById('last-score');
 const defuseIndicator = document.getElementById('defuse-indicator');
@@ -47,22 +48,18 @@ title.addEventListener('click', () => {
     }
 });
 
-// Make it mobile-friendly
-document.addEventListener('touchstart', (e) => {
-    if (!e.target.closest('button')) {
-        if (defusing) {
-            stopDefuse();
-        } else if (timer < 49) {
-            defuseStart = timer;
-            startDefuse();
-        }
+// Make it mobile-friendly with defuse button
+defuseButton.addEventListener('mousedown', (e) => {
+    if (defusing) {
+        stopDefuse();
+    } else if (timer < 49) {
+        defuseStart = timer;
+        startDefuse();
     }
 });
 
-document.addEventListener('touchend', (e) => {
-    if (!e.target.closest('button')) {
-        stopDefuse();
-    }
+defuseButton.addEventListener('mouseup', (e) => {
+    stopDefuse();
 });
 
 function startGame() {
@@ -75,15 +72,16 @@ function startGame() {
     restartButton.style.display = 'inline';
     skip20Button.style.display = 'inline';
     skip5Button.style.display = 'inline';
+    defuseButton.style.display = 'inline';
     defuseIndicator.style.display = 'block';
     updateDebugInfo();
+    startTimer();
 }
 
 function handleKeyPress(e) {
     if (e.key === ' ') {
         if (timer === 49 || defuseStart === null) {
             startGame();
-            startTimer();
         }
     } else if (e.key === '4') {
         if (!defusing && timer < 49) {
@@ -131,14 +129,7 @@ function endGame() {
     runScoreDisplay.textContent = `${finalScore.toFixed(2)}`;
     runScoreDisplay.style.display = 'block';
     resetGame();
-    instructions.style.display = 'block';
-    startButton.style.display = 'inline';
-    restartButton.style.display = 'none';
-    skip20Button.style.display = 'none';
-    skip5Button.style.display = 'none';
-    defuseIndicator.style.display = 'none';
-    document.removeEventListener('keydown', handleKeyPress);
-    document.removeEventListener('keyup', handleKeyRelease);
+   
     updateDebugInfo();
 }
 
@@ -262,7 +253,6 @@ document.addEventListener('keydown', (e) => {
     if (e.key === ' ') {
         if (timer === 49 || defuseStart === null) {
             startGame();
-            startTimer();
         }
     } else if (e.key === '4') {
         if (!defusing && timer < 49) {
@@ -279,6 +269,26 @@ document.addEventListener('keyup', (e) => {
 });
 
 function resetGame() {
+    instructions.style.display = 'block';
+    startButton.style.display = 'inline';
+    restartButton.style.display = 'none';
+    skip20Button.style.display = 'none';
+    skip5Button.style.display = 'none';
+    defuseButton.style.display = 'none';
+    defuseIndicator.style.display = 'none';
+    document.removeEventListener('keydown', handleKeyPress);
+    document.removeEventListener('keyup', handleKeyRelease);
+    defuseButton.removeEventListener('mousedown', (e) => {
+        if (defusing) {
+            stopDefuse();
+        } else if (timer < 49) {
+            defuseStart = timer;
+            startDefuse();
+        }
+    });
+    defuseButton.removeEventListener('mouseup', (e) => {
+        stopDefuse();
+    });
     clearInterval(timerInterval);
     timer = 49;
     defuseStart = null;
