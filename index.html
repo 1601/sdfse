@@ -9,14 +9,29 @@
 <body>
     <div class="container">
         <h1>Spike Defuse Game</h1>
-        <div id="timer">45.00</div>
-        <button id="start-button">Start</button>
-        <button id="restart-button">Restart</button>
-        <button id="skip-20-button">Skip 20s</button>
-        <button id="skip-5-button">Skip 5s</button>
-        <div id="defuse-indicator"></div>
-        <div id="score">Score: 0.00</div>
+        <div id="run-score" style="display: none;">Run Score: 0.00</div>
+        <p id="instructions">Press 'Spacebar' to start the game</p>
+        <button id="start-button" style="display: none;">Start</button>
+        <button id="restart-button" style="display:none;">Restart</button>
+        <button id="skip-20-button" style="display:none;">Skip 20s</button>
+        <button id="skip-5-button" style="display:none;">Skip 5s</button>
+        <div id="defuse-indicator" style="display:none;">
+            <div id="defuse-progress"></div>
+            <div id="defuse-half-marker"></div>
+        </div>
+        <div id="defuse-held-time">Defuse Held Time: 0.00s</div>
         <div id="best-score">Best Score: 0.00</div>
+        <div id="last-score">Last Score: 0.00</div>
+        <div id="debug-info" style="display: none;">
+            <p>Timer: <span id="current-timer">0.00</span></p>
+            <p>Defuse Start: <span id="defuse-start">0.00</span></p>
+            <p>Defuse Held Time: <span id="held-time">0.00</span></p>
+            <p>Current Defuse Time: <span id="current-defuse-time">0.00</span></p>
+        </div>
+        <div>
+            <label for="debug-toggle">Show Debug Info</label>
+            <input type="checkbox" id="debug-toggle">
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
