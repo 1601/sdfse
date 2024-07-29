@@ -11,6 +11,7 @@ const runScoreDisplay = document.getElementById('run-score');
 const debugInfo = document.getElementById('debug-info');
 const debugToggle = document.getElementById('debug-toggle');
 const debugBefore = document.getElementById('debug-before');
+const resetRecordsButton = document.getElementById('reset-records-button');	
 
 const currentTimerDisplay = document.getElementById('current-timer');
 const defuseStartDisplay = document.getElementById('defuse-start');
@@ -30,6 +31,14 @@ let defuseHeldTime = 0;
 // Add event listener for the title click to show debug info after 3 clicks
 let titleClickCount = 0;
 const title = document.querySelector('h1');
+
+// Add reset records button functionality
+resetRecordsButton.addEventListener('click', () => {
+    localStorage.removeItem('bestScore');
+    localStorage.removeItem('lastScore');
+    bestScoreDisplay.textContent = 'Best Score: 0.00';
+    lastScoreDisplay.textContent = 'Last Score: 0.00';
+});
 
 title.addEventListener('click', () => {
     titleClickCount += 1;
@@ -287,4 +296,42 @@ function resetGame() {
     defuseHeldTime = 0;
     document.getElementById('defuse-held-time').textContent = `Defuse Held Time: ${defuseHeldTime.toFixed(2)}s`;
     updateDebugInfo();
+}
+
+
+// Add modal functionality
+const creditsLink = document.getElementById('credits-link');
+const modal = document.getElementById('credits-modal');
+const span = document.getElementsByClassName('close')[0];
+
+creditsLink.onclick = function() {
+    modal.style.display = 'block';
+}
+
+span.onclick = function() {
+    modal.style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}
+
+const bugsLink = document.getElementById('bugs-link');
+const bugsModal = document.getElementById('bugs-modal');
+const bugsSpan = document.getElementsByClassName('close')[1];
+
+bugsLink.onclick = function() {
+    bugsModal.style.display = 'block';
+}
+
+bugsSpan.onclick = function() {
+    bugsModal.style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target === bugsModal) {
+        bugsModal.style.display = 'none';
+    }
 }
