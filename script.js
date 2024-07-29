@@ -49,6 +49,20 @@ title.addEventListener('click', () => {
 });
 
 // Make it mobile-friendly with defuse button
+defuseButton.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevent default behavior to ensure the touch event works as expected
+    if (!defusing && timer < 49) {
+        defuseStart = timer;
+        startDefuse();
+    }
+});
+
+defuseButton.addEventListener('touchend', (e) => {
+    e.preventDefault(); // Prevent default behavior to ensure the touch event works as expected
+    stopDefuse();
+});
+
+// Also keep the mouse events for desktop users
 defuseButton.addEventListener('mousedown', (e) => {
     if (defusing) {
         stopDefuse();
