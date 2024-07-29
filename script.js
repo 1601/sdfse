@@ -10,6 +10,7 @@ const instructions = document.getElementById('instructions');
 const runScoreDisplay = document.getElementById('run-score');
 const debugInfo = document.getElementById('debug-info');
 const debugToggle = document.getElementById('debug-toggle');
+const debugBefore = document.getElementById('debug-before');
 
 const currentTimerDisplay = document.getElementById('current-timer');
 const defuseStartDisplay = document.getElementById('defuse-start');
@@ -25,6 +26,35 @@ let defuseAudio;
 let defusing = false;
 let defuseTime = 0;
 let defuseHeldTime = 0;
+
+// Add event listener for the title click to show debug info after 3 clicks
+let titleClickCount = 0;
+const title = document.querySelector('h1');
+
+title.addEventListener('click', () => {
+    titleClickCount += 1;
+    if (titleClickCount >= 3) {
+        debugBefore.style.display = 'block';
+    }
+});
+
+// Make it mobile-friendly
+document.addEventListener('touchstart', (e) => {
+    if (!e.target.closest('button')) {
+        if (defusing) {
+            stopDefuse();
+        } else if (timer < 49) {
+            defuseStart = timer;
+            startDefuse();
+        }
+    }
+});
+
+document.addEventListener('touchend', (e) => {
+    if (!e.target.closest('button')) {
+        stopDefuse();
+    }
+});
 
 function startGame() {
     resetGame();
@@ -71,18 +101,25 @@ function startTimer() {
     }, 10);
 }
 
+function calculateScore() {
+    if (defuseStart === null) {
+        return -timer;
+    }
+    return Math.abs(timer); // The score is based on the timer at the end
+}
+
+
 function endGame() {
     audio.pause();
-     // show all the details on the console
-     console.log('timer', timer);
-     console.log('defuseStart', defuseStart);
-     console.log('defuseHeldTime', defuseHeldTime);
-     console.log('defuseTime', defuseTime);
-     console.log('finalScore', calculateScore());
     const finalScore = calculateScore();
+    console.log('timer', timer);
+    console.log('defuseStart', defuseStart);
+    console.log('defuseHeldTime', defuseHeldTime);
+    console.log('defuseTime', defuseTime);
+    console.log('finalScore', finalScore);
     saveBestScore(finalScore);
     saveLastScore(finalScore);
-    runScoreDisplay.textContent = `Run Score: ${finalScore.toFixed(2)}`;
+    runScoreDisplay.textContent = `${finalScore.toFixed(2)}`;
     runScoreDisplay.style.display = 'block';
     resetGame();
     instructions.style.display = 'block';
@@ -96,13 +133,6 @@ function endGame() {
     updateDebugInfo();
 }
 
-function calculateScore() {
-    if (defuseStart === null) {
-        return -timer;
-    }
-    const actualDefuseTime = 7 - defuseHeldTime;
-    return Math.abs(timer - actualDefuseTime);
-}
 
 function saveBestScore(score) {
     let bestScore = localStorage.getItem('bestScore');
@@ -163,11 +193,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function startDefuse() {
-    if (defuseHeldTime >= 3.5) {
-        defuseTime = 3.5;
-    } else {
-        defuseTime = 0;
-    }
+    // if (defuseHeldTime >= 3.5) {
+    //     defuseTime = 3.5;
+    // } else {
+    //     defuseTime = 0;
+    // }
+    defuseTime = 0;
     defusing = true;
     playDefuseAudio();
     updateDefuseIndicator();
@@ -176,12 +207,12 @@ function startDefuse() {
 
 function stopDefuse() {
     defusing = false;
-    if (defuseTime < 3.5) {
+    if (defuseTime < 3.5 && defuseHeldTime !== 3.5) {
         defuseHeldTime = 0; // Reset if less than 3.5 seconds
     } else {
         defuseHeldTime = 3.5; // Retain if at least 3.5 seconds
     }
-    defuseTime = 0; // Reset current defuse time
+    // defuseTime = 0; // Reset current defuse time 
     if (defuseAudio) {
         defuseAudio.pause();
         defuseAudio.currentTime = 0;
