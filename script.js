@@ -359,3 +359,12 @@ window.onclick = function(event) {
         bugsModal.style.display = 'none';
     }
 }
+
+// announcement-modal close button
+const announcementModal = document.getElementById('announcement-modal');
+const announcementSpan = document.getElementById('announcement-close');
+
+announcementSpan.onclick = function() {
+    
+    announcementModal.style.display = 'none';
+}
