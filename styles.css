@@ -119,3 +119,27 @@ footer p {
 footer p a {
     margin: 0 5px;
 }
+
+.announcement-content {
+   /* display items side by side */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.announcement-image {
+    /* width: 50vw; */
+    height: 50vh;
+}
+
+.announcement-content img {
+    /* width: 50vh; */
+    height: 50vh;
+}
+
+.announcement-content p {
+    margin: 0 20px;
+    font-size: 20px;
+    text-align: center;
+}
